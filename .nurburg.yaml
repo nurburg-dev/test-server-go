@@ -2,6 +2,6 @@ NurburgKind: SERVICE
 Replicas: 2
 Port: 9000
 MemoryMiB: 256
-Cores: 1
+CPU: 1
 Env:
   TEST_ENV_VAR: VALUE

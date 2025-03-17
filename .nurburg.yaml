@@ -1,4 +1,5 @@
 NurburgKind: SERVICE
+Name: test-service
 Replicas: 2
 Port: 9000
 MemoryMiB: 256

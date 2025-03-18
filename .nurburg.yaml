@@ -6,3 +6,9 @@ MemoryMiB: 256
 CPU: 1
 Env:
   TEST_ENV_VAR: VALUE
+---
+NurburgKind: MYSQL
+Name: mysql-test
+---
+NurburgKind: POSTGRES
+Name: postgres-test

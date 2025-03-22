@@ -50,6 +50,7 @@ export default function (data) {
 
   const result = db.exec(insertQuery);
   check(result, { 'Data inserted successfully': (r) => r.length === 0 });
+  return { db: db };
 }
 
 export function teardown(data) {

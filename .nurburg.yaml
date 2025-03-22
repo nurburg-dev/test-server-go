@@ -15,5 +15,5 @@ Name: postgres-seeder
 File: seeder.js
 ---
 NurburgKind: K6LOAD
-Name: postgres-test
+Name: load-test
 File: load.js

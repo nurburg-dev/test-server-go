@@ -1,12 +1,11 @@
 import { check } from 'k6';
-import { Client } from 'k6/x/sql';
-
+import { sql } from 'k6/x/sql';
+import driver from "k6/x/sql/driver/postgres";
 export const options = {
   vus: 1,
   iterations: 1,
 };
 
-const db = new Client();
 
 export function setup() {
   const postgresUser = __ENV.POSTGRES_USER;
@@ -23,7 +22,7 @@ export function setup() {
 
   const connectionString = `postgres://${postgresUser}:${postgresPassword}@${postgresHost}:${postgresPort}/${postgresDb}?sslmode=disable`;
 
-  db.connect(connectionString);
+  const db = sql.open(driver, connectionString);
 
   // Create a table if it doesn't exist
   const createTableQuery = `

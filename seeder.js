@@ -1,5 +1,5 @@
 import { check } from 'k6';
-import { sql } from 'k6/x/sql';
+import sql from 'k6/x/sql';
 import driver from "k6/x/sql/driver/postgres";
 export const options = {
   vus: 1,

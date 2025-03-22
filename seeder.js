@@ -53,7 +53,9 @@ export default function (data) {
   return { db: db };
 }
 
+/* 
 export function teardown(data) {
   const db = data.db;
   db.close();
 }
+*/

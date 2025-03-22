@@ -19,5 +19,5 @@ export default function () {
     'is status 200': (r) => r.status === 200,
     'response time is acceptable': (r) => r.timings.duration < 500,
   });
-  sleep(1); // Add a 1-second pause between requests
+  sleep(1); 
 }

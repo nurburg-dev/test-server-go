@@ -1,5 +1,5 @@
 import { check } from 'k6';
-import { Client } from 'k6/experimental/sql';
+import { Client } from 'k6/x/sql';
 
 export const options = {
   vus: 1,

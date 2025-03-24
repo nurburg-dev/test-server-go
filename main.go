@@ -10,6 +10,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	_ "github.com/lib/pq" // Import the PostgreSQL driver
 )
 
@@ -62,6 +65,27 @@ func initDB() {
 	})
 }
 
+var httpDuration = prometheus.NewHistogramVec(
+	prometheus.HistogramOpts{
+		Name:    "http_request_duration_seconds",
+		Help:    "Histogram of response time for handler.",
+		Buckets: prometheus.DefBuckets, // Default: [0.005, 0.01, 0.025, ...]
+	},
+	[]string{"path"},
+)
+
+func init() {
+	prometheus.MustRegister(httpDuration) // Register custom metrics
+}
+
+func instrumentedHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next.ServeHTTP(w, r)
+		duration := time.Since(start).Seconds()
+		httpDuration.WithLabelValues(r.URL.Path).Observe(duration)
+	})
+}
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	// Get a connection from the pool
 	db := dbPool
@@ -113,8 +137,9 @@ func main() {
 	// Initialize the database connection pool
 	initDB()
 	defer dbPool.Close()
+	http.Handle("/metrics", promhttp.Handler())
 
-	http.HandleFunc("/", helloHandler)
+	http.Handle("/", instrumentedHandler(http.HandlerFunc(helloHandler)))
 
 	fmt.Println("Starting server on port 9000...")
 	err := http.ListenAndServe(":9000", nil)
